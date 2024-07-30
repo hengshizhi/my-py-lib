@@ -28,16 +28,3 @@ def pipe(name=None) -> tuple[pipe_end,pipe_end]:
     my_queue = Queue()
     his_queue = Queue()
     return pipe_end(name,my_queue,his_queue), pipe_end(name,his_queue,my_queue)
-
-def test():
-    p1,p2 = pipe("test")
-    p1.send("hello")
-    print(p2.recv())
-
-def test2():
-    p1,p2 = pipe("test")
-    # while True:
-    #     # p1.send("hello")
-    #     print(p1.try_recv())
-
-# test2()
