@@ -15,4 +15,4 @@ def ResultTest2():
     print(a(10,2).extract()) # 使用 extract() 方法获取结果,如果有错误,则会抛出异常
 
 
-ResultTest2()
+# ResultTest2()
