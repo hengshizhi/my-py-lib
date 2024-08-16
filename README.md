@@ -4,6 +4,8 @@
 `run` - 线程调度库   
 `result` - result类型   
 `test_tools` - 测试工具(装饰器)   
+`single_process`,`synchronized_class` - 线程同步工具（装饰器）
+`instructions` - 指令工具，解释器
 
 安装方法 :
 ```
