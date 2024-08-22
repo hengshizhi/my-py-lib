@@ -8,8 +8,10 @@ def test():
 
 def test2():
     p1,p2 = pipe("test")
+    p1.close()
+    p2.try_recv()
     # while True:
     #     # p1.send("hello")
     #     print(p1.try_recv())
 
-# test2()
+test2()
