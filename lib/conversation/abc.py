@@ -3,7 +3,7 @@ from typing import Callable,Awaitable,Type
 from ..run.asyncio_pipe import PipeEnd,pipe
 import asyncio
 
-class Connecting(ABC):
+class ConnectingBase(ABC):
     @abstractmethod
     def __init__(self) -> None:pass
     @abstractmethod
@@ -11,8 +11,8 @@ class Connecting(ABC):
     @abstractmethod
     def recv(self):pass
 
-class ConversationalState:
-    def __init__(self,pipe_end:PipeEnd,Connecting:Connecting):
+class ConversationalStateBase:
+    def __init__(self,pipe_end:PipeEnd,Connecting:ConnectingBase):
         self.pipe_end = pipe_end
         self.__Connecting = Connecting
     def send(self, data,*args,**kwrags):
@@ -23,16 +23,16 @@ class ConversationalState:
         return await self.pipe_end.try_recv()
 
 class ConversationBase(ABC):
-    def __init__(self,ConvStateClass:Type[ConversationalState],Connecting:Connecting) -> None:
+    def __init__(self,ConvStateClass:Type[ConversationalStateBase],Connecting:ConnectingBase) -> None:
         '''
         ConvStateClass: 传入ConversationalState类(注意:是类,不是对象)
         Connecting: 传入Connecting对象
         '''
-        self.conv_funcs:dict[any,Callable[[ConversationalState],Awaitable[any]]] = {}
+        self.conv_funcs:dict[any,Callable[[ConversationalStateBase],Awaitable[any]]] = {}
         self.ConvStateClass = ConvStateClass
         self.Connecting = Connecting
 
-    def add(self,conv_id,processing_func:Callable[[ConversationalState],Awaitable[any]]):
+    def add(self,conv_id,processing_func:Callable[[ConversationalStateBase],Awaitable[any]]):
         '''
         conv_id : conv_id
         processing_func : 一个接受参数类型ConversationalState的异步函数
