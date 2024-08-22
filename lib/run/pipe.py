@@ -65,17 +65,6 @@ class pipe_end:
             return None
 
     def close(self):
-        self.closed = True
-        try:
-            while True:
-                self.my_queue.get(block=False)
-        except Empty:
-            pass
-        try:
-            while True:
-                self.his_queue.get(block=False)
-        except Empty:
-            pass
         self.my_queue.close()
         self.his_queue.close()
     

@@ -10,6 +10,8 @@ async def test():
         print(data)
         await pipe_a.send(None)
         print(await pipe_b.recv())
+        await pipe_a.close()
+        print(await pipe_b.recv())
 
 if __name__ == '__main__':
     asyncio.run(test())
