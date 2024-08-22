@@ -39,7 +39,7 @@ class ConversationBase(ABC):
         '''
         self.conv_funcs[conv_id] = processing_func
 
-    def __run_func(self):
+    def run_func(self):
         '''
         启动所有处理会话的函数
         '''
@@ -47,18 +47,17 @@ class ConversationBase(ABC):
         for conv_id,processing_func in self.conv_funcs.items():
             pipe_a,pipe_b = pipe()
             self.conv_pipes[conv_id] = pipe_a
-            asyncio.run(processing_func(self.ConvStateClass(pipe_b,self.Connecting)))
+            asyncio.create_task(processing_func(self.ConvStateClass(pipe_b,self.Connecting)))
 
     def start_loop(self):
         '''
         开始事件循环
         '''
-        self.__run_func()
+        self.run_func()
         while True:
             the_conv_id,content = self.__sepa_id_and_content(self.Connecting.recv())
-            asyncio.run(self.conv_pipes.get(the_conv_id).send(content))
+            asyncio.create_task(self.conv_pipes.get(the_conv_id).send(content))
 
-    @abstractmethod
     def __sepa_id_and_content(self,data) -> tuple[any,any]:
         '''
         从获取的Connecting接收到的原始数据中解析出conv_id(会话id)和本次接收到的内容
